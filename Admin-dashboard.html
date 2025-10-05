@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard - Chiradex Bank</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #3b82f6, #9333ea);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #52057b;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(147, 51, 234, 0.7);
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+    }
+    header h1 {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      user-select: none;
+    }
+    header .admin-info {
+      font-size: 1.1rem;
+      opacity: 0.85;
+      user-select: none;
+    }
+    header button {
+      background: linear-gradient(90deg, #9333ea, #3b82f6);
+      border: none;
+      border-radius: 20px;
+      padding: 0.5rem 1.2rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 0 12px #52057b;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    header button:hover {
+      background: linear-gradient(90deg, #3b82f6, #9333ea);
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    section {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 25px;
+      padding: 1.5rem;
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.7);
+    }
+    h2 {
+      margin-top: 0;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+
+    /* Users Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      user-select: none;
+    }
+    th, td {
+      padding: 0.7rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    th {
+      background: rgba(147, 51, 234, 0.7);
+      font-weight: 700;
+    }
+    td {
+      font-weight: 600;
+    }
+
+    /* Add Money Form */
+    .add-money-form {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      user-select: none;
+    }
+    .add-money-form select,
+    .add-money-form input {
+      padding: 0.6rem 1rem;
+      border-radius: 20px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      outline: none;
+      flex-grow: 1;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
+      transition: box-shadow 0.3s ease;
+    }
+    .add-money-form select:focus,
+    .add-money-form input:focus {
+      box-shadow: inset 0 0 12px #9333ea;
+    }
+
+    .btn-add-money {
+      background: linear-gradient(90deg, #3b82f6, #9333ea);
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 25px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 15px #9333ea;
+      transition: background 0.3s ease;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .btn-add-money:disabled {
+      background: #a78bfa;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .btn-add-money:hover:not(:disabled) {
+      background: linear-gradient(90deg, #9333ea, #3b82f6);
+    }
+    .spinner {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      margin-top: -9px;
+      border: 3px solid transparent;
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    .btn-loading .spinner {
+      display: block;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Transactions List */
+    .transactions-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 1rem;
+      user-select: none;
+    }
+    .transactions-list table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .transactions-list th, .transactions-list td {
+      padding: 0.5rem 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      font-weight: 600;
+      text-align: left;
+    }
+    .transactions-list th {
+      background: rgba(147, 51, 234, 0.6);
+    }
+
+    /* Scrollbar for transactions */
+    .transactions-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    .transactions-list::-webkit-scrollbar-thumb {
+      background: #9333ea;
+      border-radius: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .add-money-form {
+        flex-direction: column;
+      }
+      .btn-add-money {
+        width: 100%;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Chiradex Bank - Admin Dashboard</h1>
+    <div class="admin-info">Admin: chiradex@gmail.com</div>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <main>
+    <section id="usersSection">
+      <h2>Registered Users</h2>
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>Account #</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Balance ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Users added dynamically -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="addMoneySection">
+      <h2>Add Money to User Account</h2>
+      <form id="addMoneyForm" class="add-money-form">
+        <select id="userSelect" required>
+          <option value="" disabled selected>Select user account</option>
+        </select>
+        <input type="number" id="amountInput" placeholder="Amount ($)" min="1" required />
+        <button type="submit" class="btn-add-money">
+          Add Money
+          <div class="spinner"></div>
+        </button>
+      </form>
+      <div id="addMoneyMsg" style="margin-top: 1rem; min-height: 1.4rem;"></div>
+    </section>
+
+    <section id="transactionsSection">
+      <h2>Transactions for Selected User</h2>
+      <div class="transactions-list" id="transactionsList">
+        <em>Select a user above to view transactions</em>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Check admin is logged in
+    const loggedInAdmin = localStorage.getItem('chiradexAdminLoggedIn');
+  
+    const usersTableBody = document.querySelector('#usersTable tbody');
+    const userSelect = document.getElementById('userSelect');
+    const amountInput = document.getElementById('amountInput');
+    const addMoneyForm = document.getElementById('addMoneyForm');
+    const addMoneyBtn = addMoneyForm.querySelector('button');
+    const addMoneyMsg = document.getElementById('addMoneyMsg');
+    const transactionsList = document.getElementById('transactionsList');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    let users = JSON.parse(localStorage.getItem('chiradexUsers') || '[]');
+
+    // Render users in table and dropdown
+    function renderUsers() {
+      usersTableBody.innerHTML = '';
+      userSelect.innerHTML = '<option value="" disabled selected>Select user account</option>';
+      users.forEach(user => {
+        // Calculate balance if not saved
+        if (user.balance == null) {
+          user.balance = user.transactions.reduce((sum, t) => {
+            if (t.type === 'deposit' || t.type === 'transfer_in') return sum + t.amount;
+            if (t.type === 'withdraw' || t.type === 'transfer_out') return sum - t.amount;
+            return sum;
+          }, 0);
+        }
+
+        // Add row
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${user.accountNumber}</td>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.balance.toFixed(2)}</td>
+        `;
+        usersTableBody.appendChild(tr);
+
+        // Add to dropdown
+        const option = document.createElement('option');
+        option.value = user.accountNumber;
+        option.textContent = `${user.name} (${user.accountNumber}) - $${user.balance.toFixed(2)}`;
+        userSelect.appendChild(option);
+      });
+    }
+
+    renderUsers();
+
+   userSelect.addEventListener('change', () => {
+      const selectedAcc = userSelect.value;
+      const user = users.find(u => u.accountNumber === selectedAcc);
+      if (!user) {
+        transactionsList.innerHTML = '<em>No user selected or user not found.</em>';
+        return;
+      }
+
+      if (!user.transactions || user.transactions.length === 0) {
+        transactionsList.innerHTML = '<em>No transactions for this user.</em>';
+        return;
+      }
+
+      // Build transactions table
+      let html = `<table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount ($)</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+      user.transactions.slice().reverse().forEach(tx => {
+        const date = new Date(tx.date).toLocaleString();
+        html += `<tr>
+          <td>${date}</td>
+          <td>${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</td>
+          <td>${tx.amount.toFixed(2)}</td>
+          <td>${tx.description || ''}</td>
+        </tr>`;
+      });
+
+      html += '</tbody></table>';
+      transactionsList.innerHTML = html;
+    });
+
+    // Handle Add Money form submission with 5-second loading animation
+    addMoneyForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const selectedAcc = userSelect.value;
+      const amount = parseFloat(amountInput.value);
+
+      if (!selectedAcc) {
+        addMoneyMsg.style.color = 'orange';
+        addMoneyMsg.textContent = 'Please select a user account.';
+        return;
+      }
+      if (isNaN(amount) || amount <= 0) {
+        addMoneyMsg.style.color = 'orange';
+        addMoneyMsg.textContent = 'Please enter a valid amount greater than zero.';
+        return;
+      }
+
+      addMoneyMsg.textContent = '';
+      addMoneyBtn.disabled = true;
+      addMoneyBtn.classList.add('btn-loading');
+
+      // Simulate loading for 5 seconds
+      setTimeout(() => {
+        const user = users.find(u => u.accountNumber === selectedAcc);
+        if (!user) {
+          addMoneyMsg.style.color = 'red';
+          addMoneyMsg.textContent = 'User not found.';
+          addMoneyBtn.disabled = false;
+          addMoneyBtn.classList.remove('btn-loading');
+          return;
+        }
+
+        // Update balance and add transaction
+        user.balance = (user.balance || 0) + amount;
+        if (!user.transactions) user.transactions = [];
+        user.transactions.push({
+          type: 'deposit',
+          amount: amount,
+          date: new Date().toISOString(),
+          description: 'Admin added money'
+        });
+
+        // Save back to localStorage
+        localStorage.setItem('chiradexUsers', JSON.stringify(users));
+        renderUsers();
+        userSelect.value = selectedAcc;
+        userSelect.dispatchEvent(new Event('change')); // refresh transactions display
+
+        addMoneyMsg.style.color = 'lightgreen';
+        addMoneyMsg.textContent = `Successfully added $${amount.toFixed(2)} to ${user.name}'s account.`;
+        amountInput.value = '';
+        addMoneyBtn.disabled = false;
+        addMoneyBtn.classList.remove('btn-loading');
+      }, 5000);
+    });
+
+    // Logout button
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('chiradexAdminLoggedIn');
+      window.location.href = 'login.html';
+    });
+  
+  </script>
+  <script>
+// Save registered users to localStorage so transfer page can access them
+const users = [
+  {
+    accountNumber: "3543334819",
+    name: "undefined",
+    email: "chiradex@gmail.com"
+  },
+  {
+    accountNumber: "7264187139",
+    name: "Chike",
+    email: "desmond@gmail.com"
+  }
+];
+
+// Save this list to localStorage
+localStorage.setItem("chiradexUsers", JSON.stringify(users));
+</script>
+</body>
+</html>
