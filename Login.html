@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Chiradex Bank</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    body {
+      background: linear-gradient(135deg, #3b82f6, #9333ea);
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: white;
+    }
+    .login-container {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 2.5rem 3rem;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.7);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      text-shadow: 1px 1px 3px #52057b;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 1rem 0 0.3rem;
+      text-align: left;
+    }
+    input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
+      transition: box-shadow 0.3s ease;
+    }
+    input:focus {
+      box-shadow: inset 0 0 12px #9333ea;
+      background-color: rgba(255,255,255,0.15);
+      color: white;
+    }
+    .btn-login {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1.2rem;
+      border-radius: 25px;
+      border: none;
+      background: linear-gradient(90deg, #3b82f6, #9333ea);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 0 15px #9333ea;
+      transition: background 0.3s ease;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-login:disabled {
+      background: #a78bfa;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .error-msg {
+      margin-top: 1rem;
+      color: #f87171;
+      font-weight: 600;
+      height: 1.2rem;
+    }
+    /* Loading spinner */
+    .spinner {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      margin-top: -9px;
+      border: 3px solid transparent;
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    .btn-loading .spinner {
+      display: block;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Chiradex Bank Login</h2>
+    <form id="loginForm" autocomplete="off">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="you@example.com" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Your password" required />
+
+      <button type="submit" class="btn-login" id="loginBtn">
+        Login
+        <div class="spinner"></div>
+      </button>
+
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+  </div>
+
+  <script>
+    const adminEmail = "chiradex@gmail.com";
+    const adminPassword = "12345qwert$Q";
+
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMsg = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      errorMsg.textContent = "";
+
+      // Simple validation
+      if (!emailInput.value || !passwordInput.value) {
+        errorMsg.textContent = "Please fill all fields.";
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.classList.add('btn-loading');
+
+      // Simulate 5-second loading
+      setTimeout(() => {
+        const email = emailInput.value.trim().toLowerCase();
+        const password = passwordInput.value;
+
+        if(email === adminEmail && password === adminPassword) {
+          // Admin login success
+          localStorage.setItem('chiradexLoggedInUser', JSON.stringify({email: adminEmail, isAdmin: true}));
+          window.location.href = 'admin-dashboard.html';
+          return;
+        }
+
+        // Check regular users stored in localStorage
+        const users = JSON.parse(localStorage.getItem('chiradexUsers') || "[]");
+
+        const user = users.find(u => u.email.toLowerCase() === email && u.password === password);
+
+        if(user) {
+          // User login success
+          localStorage.setItem('chiradexLoggedInUser', JSON.stringify({email: user.email, isAdmin: false, accountNumber: user.accountNumber, name: user.name}));
+          window.location.href = 'user-dashboard.html';
+        } else {
+          errorMsg.textContent = "Invalid email or password.";
+          loginBtn.disabled = false;
+          loginBtn.classList.remove('btn-loading');
+        }
+      }, 5000);
+    });
+  </script>
+
+</body>
+</html>
