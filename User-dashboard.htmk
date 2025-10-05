@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chiradex Bank - User Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #004aad;
+      color: white;
+      padding: 15px 20px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    #profile-small {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .main {
+      padding: 20px;
+    }
+
+    .balance-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .balance-card h2 {
+      margin: 0;
+      font-size: 20px;
+      color: gray;
+    }
+
+    .balance-amount {
+      font-size: 36px;
+      color: #004aad;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    .account-number {
+      font-size: 14px;
+      color: gray;
+    }
+
+    .icons-row {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .icon-btn {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.05);
+      background: #eef6ff;
+    }
+
+    .icon-btn img {
+      width: 30px;
+      margin-bottom: 5px;
+    }
+
+    .feature-panels {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      flex: 1;
+      padding: 20px;
+      min-width: 250px;
+    }
+
+    .panel h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #004aad;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+  </style>
+  <style>
+  .icon-button {
+    width: 90px;
+    height: 90px;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .icon-button:hover {
+    transform: scale(1.05);
+  }
+
+  .icon-image {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 5px;
+    filter: brightness(0); /* Makes it black */
+  }
+
+  .icon-button p {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Chiradex Bank</h1>
+  <label>
+    <img src="https://via.placeholder.com/40" alt="Profile" id="profile-small">
+    <input type="file" id="upload-input" accept="image/*">
+  </label>
+</header>
+
+<div class="main">
+  <div class="balance-card">
+    <h2>Your Balance</h2>
+    <div class="balance-amount" id="balance-amount">$0.00</div>
+    <div class="account-number" id="acc-number">Account #: Loading...</div>
+  </div>
+
+  <div class="icons-row">
+    <div class="icon-btn" id="withdraw-btn">
+      <img src="https://img.icons8.com/ios-filled/50/money.png" alt="Withdraw Money Icon" />
+      <span>Withdraw</span>
+    </div>
+    <!-- Matching Transfer Icon -->
+<div class="icon-button">
+  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" alt="Transfer" class="icon-image" />
+  <p>Transfer</p>
+</div>
+    <div class="icon-btn" id="deposit-btn">
+      <img src="https://img.icons8.com/ios-filled/50/money-transfer.png"/>
+      <span>Deposit</span>
+    </div>
+    <div class="icon-btn" id="billpay-btn">
+      <img src="https://img.icons8.com/ios-filled/50/bill.png"/>
+      <span>Bill Pay</span>
+    </div>
+    <div class="icon-btn" id="statements-btn">
+      <img src="https://img.icons8.com/ios-filled/50/activity-history.png" alt="Transaction History Icon" />
+      <span>Statements</span>
+    </div>
+    <div class="icon-btn" id="settings-btn">
+      <img src="https://img.icons8.com/ios-filled/50/settings.png"/>
+      <span>Settings</span>
+    </div>
+  </div>
+
+  <div class="feature-panels">
+    <div class="panel">
+      <h3>Recent Activity</h3>
+      <p>No transactions yet.</p>
+    </div>
+    <div class="panel">
+      <h3>Notifications</h3>
+      <p>You will receive messages from Chiradex here.</p>
+    </div>
+    <div class="panel">
+      <h3>Need Help?</h3>
+      <p><button style="padding: 8px 16px; border-radius: 20px; background: #004aad; color: white; border: none;">Contact Support</button></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get user data from localStorage
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+
+  // Display default $0.00 unless overridden by admin
+  const balanceElement = document.getElementById('balance-amount');
+  const accNumElement = document.getElementById('acc-number');
+
+  if (currentUser) {
+    balanceElement.textContent = `$${currentUser.balance || 0}`;
+    accNumElement.textContent = `Account #: ${currentUser.accountNumber}`;
+    if (currentUser.photo) {
+      document.getElementById('profile-small').src = currentUser.photo;
+    }
+  }
+
+  // Handle profile photo upload
+  const uploadInput = document.getElementById('upload-input');
+  uploadInput.addEventListener('change', () => {
+    const file = uploadInput.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('profile-small').src = e.target.result;
+      currentUser.photo = e.target.result;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+      const index = users.findIndex(u => u.email === currentUser.email);
+      if (index > -1) {
+        users[index].photo = e.target.result;
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Action button handlers
+  document.getElementById('withdraw-btn').addEventListener('click', () => alert('Withdraw Coming Soon!'));
+  document.getElementById('deposit-btn').addEventListener('click', () => alert('Deposit Coming Soon!'));
+  document.getElementById('billpay-btn').addEventListener('click', () => alert('Bill Pay Coming Soon!'));
+  document.getElementById('statements-btn').addEventListener('click', () => alert('Statements Coming Soon!'));
+  document.getElementById('settings-btn').addEventListener('click', () => alert('Settings Coming Soon!'));
+</script>
+<script>
+    
+</script>
+<script>
+  document.querySelectorAll('.icon-button').forEach(btn => {
+    btn.addEventListener('click', function () {
+      if (btn.textContent.includes("Transfer")) {
+        btn.innerHTML = "Loading...";
+        setTimeout(() => {
+          window.location.href = "transfer.html";
+        }, 5000);
+      }
+    });
+  });
+</script>
+<script>
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+let users = JSON.parse(localStorage.getItem('users')) || [];
+
+// Find the fresh version of the user from full list (to reflect changes like admin transfer)
+if (currentUser) {
+  const freshUser = users.find(u => u.email === currentUser.email);
+  if (freshUser) {
+    currentUser = freshUser;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser)); // update stored currentUser
+  }
+
+  document.getElementById('balance-amount').textContent = `$${parseFloat(currentUser.balance || 0).toFixed(2)}`;
+  document.getElementById('acc-number').textContent = `Account #: ${currentUser.accountNumber}`;
+  if (currentUser.photo) {
+    document.getElementById('profile-small').src = currentUser.photo;
+  }
+}
+</script>
+<script>
+    const recentActivityPanel = document.querySelector('.panel p'); // First panel
+if (currentUser.transactions && currentUser.transactions.length > 0) {
+  recentActivityPanel.innerHTML = currentUser.transactions.slice(-3).map(tx =>
+    `<p>${tx.date}: ${tx.type} - $${tx.amount}</p>`
+  ).join('');
+}
+
+</script>
+</body>
+    </html>
+    
